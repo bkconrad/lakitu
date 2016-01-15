@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+require "rubygems" # ruby1.9 doesn't "require" it though
+require "thor"
+require "#{File.dirname(__FILE__)}/../lib/lakitu.rb"
+
+Lakitu::Main.start

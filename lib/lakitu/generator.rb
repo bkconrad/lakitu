@@ -1,0 +1,2 @@
+class Lakitu::Generator
+end
