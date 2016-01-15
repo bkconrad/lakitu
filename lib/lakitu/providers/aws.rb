@@ -8,7 +8,7 @@ class Lakitu::Provider::Aws < Lakitu::Provider
   end
 
   def instances profile
-    ec2(profile, 'us-east-1').instances.to_a.map { |x| to_hash x }
+    result = ec2(profile, 'us-east-1').instances.to_a.map { |x| to_hash x }
   end
 
   private
