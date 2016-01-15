@@ -45,6 +45,12 @@ aws_access_key_id = ACCESSKEY
 aws_secret_access_key = SECRETKEY
 region = us-east-1
 EOF
+
 def mock_config
   expect(File).to receive(:read).with(File.expand_path('~/.aws/credentials')).and_return(AWS_CREDENTIALS_CONTENT).at_least(:once)
 end
+
+SSH_CONFIG_RESULT=<<EOF
+Host default-test-i-deadbeef
+  HostName 1.2.3.4
+EOF

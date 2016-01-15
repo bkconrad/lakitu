@@ -24,7 +24,11 @@ describe Lakitu::Generator do
       expect(subject.instances).to include x
     end
   end
-  it "generates ssh config content from templates"
+
+  it "generates ssh config content from templates" do
+    expect(subject.generate).to include SSH_CONFIG_RESULT
+  end
+
   it "reads ~/.ssh/*.sshconfig files"
   it "writes the result to ~/.ssh/config"
 end
