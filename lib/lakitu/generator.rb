@@ -2,8 +2,8 @@ require 'erb'
 require 'ostruct'
 class Lakitu::Generator
   CLAUSE_TEMPLATE=<<-EOF
-Host <%= host %><% if @keyfile %>
-  IdentityFile ~/.ssh/spotlight-devops.pem
+Host <%= host %><% if keyfile %>
+  IdentityFile <%= keyfile %>
   <% end %>
   HostName <%= public_ip %>
   EOF
