@@ -16,6 +16,10 @@ Host <%= host %><% if keyfile %>
     end).join("\n")
   end
 
+  def generate!
+    puts generate
+  end
+
   def instances
     Lakitu::Provider.providers.map do |provider_class|
       get_instances(provider_class.new)
