@@ -15,17 +15,21 @@ def stub_aws
   }
 end
 
-WRANGLED_INSTANCE_DATA=[
+WRANGLED_INSTANCE_DATA_COMPLETE=[
   {
     id: 'i-deadbeef',
     name: 'test',
     key: 'testkey',
+    profile: 'default',
+    region: 'us-east-1',
     public_ip: '1.2.3.4'
   },
   {
     id: 'i-beeff00d',
     name: 'test2',
     key: 'testkey2',
+    profile: 'default',
+    region: 'us-east-1',
     public_ip: '1.2.3.5'
   }
 ]
@@ -42,5 +46,5 @@ aws_secret_access_key = SECRETKEY
 region = us-east-1
 EOF
 def mock_config
-  expect(File).to receive(:read).with(File.expand_path('~/.aws/credentials')).and_return AWS_CREDENTIALS_CONTENT
+  expect(File).to receive(:read).with(File.expand_path('~/.aws/credentials')).and_return(AWS_CREDENTIALS_CONTENT).at_least(:once)
 end

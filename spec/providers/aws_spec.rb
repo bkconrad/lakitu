@@ -1,4 +1,3 @@
-require 'json'
 RSpec.describe Lakitu::Provider::Aws do
   subject { Lakitu::Provider::Aws.new }
   context "with a valid credentials config" do
@@ -17,7 +16,7 @@ RSpec.describe Lakitu::Provider::Aws do
     end
 
     it "gets a list of instances for a given profile" do
-      expect(subject.instances('epoxy').to_json).to eq(WRANGLED_INSTANCE_DATA.to_json)
+      expect(subject.instances('default', 'us-east-1')).to eq(WRANGLED_INSTANCE_DATA_COMPLETE)
     end
   end
 end

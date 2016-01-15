@@ -7,7 +7,9 @@ class Lakitu::Generator
 
   def get_instances provider
     provider.profiles.map do |profile|
-      provider.instances(profile)
+      provider.regions.map do |region|
+        provider.instances(profile, region)
+      end
     end.flatten
   end
 end

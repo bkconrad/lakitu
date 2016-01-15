@@ -7,8 +7,16 @@ class Lakitu::Provider::Aws < Lakitu::Provider
     IniParse.parse(File.read(File.expand_path('~/.aws/credentials'))).to_hash.keys
   end
 
-  def instances profile
-    result = ec2(profile, 'us-east-1').instances.to_a.map { |x| to_hash x }
+  def instances profile, region
+    result = ec2(profile, region).instances.to_a.map { |x| to_hash x }
+    result.each do |x|
+      x[:profile] = profile
+      x[:region] = region
+    end
+  end
+
+  def regions
+    [ 'us-east-1', 'us-west-1', 'us-west-2' ]
   end
 
   private

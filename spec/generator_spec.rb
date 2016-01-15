@@ -5,16 +5,25 @@ describe Lakitu::Generator do
     mock_config
   end
 
-  it "invokes all providers" do
+  it "invokes all providers, for all regions, over all profiles" do
     expect(Lakitu::Provider.providers.length).to be > 0
-    Lakitu::Provider.providers.each do |provider|
-      expect_any_instance_of(provider).to receive(:instances).at_least(:once)
+    Lakitu::Provider.providers.each do |provider_class|
+      provider = provider_class.new
+      provider.profiles.each do |profile|
+        provider.regions.each do |region|
+          expect_any_instance_of(provider_class).to receive(:instances).with(profile, region).exactly(:once)
+        end
+      end
     end
 
     subject.instances
   end
 
-  it "merges instance lists from the providers"
+  it "merges instance lists from the providers" do
+    WRANGLED_INSTANCE_DATA_COMPLETE.each do |x|
+      expect(subject.instances).to include x
+    end
+  end
   it "generates ssh config content from templates"
   it "reads ~/.ssh/*.sshconfig files"
   it "writes the result to ~/.ssh/config"
