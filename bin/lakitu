@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-require "rubygems" # ruby1.9 doesn't "require" it though
+require "rubygems"
 require "thor"
 require "#{File.dirname(__FILE__)}/../lib/lakitu.rb"
 
