@@ -29,6 +29,10 @@ describe Lakitu::Generator do
     expect(subject.generate).to include SSH_CONFIG_RESULT
   end
 
-  it "reads ~/.ssh/*.sshconfig files"
+  it "reads ~/.ssh/*.sshconfig files" do
+    mock_local_sshconfig
+    expect(subject.generate).to include LOCAL_SSHCONFIG
+  end
+
   it "writes the result to ~/.ssh/config"
 end

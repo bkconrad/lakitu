@@ -50,6 +50,15 @@ def mock_config
   expect(File).to receive(:read).with(File.expand_path('~/.aws/credentials')).and_return(AWS_CREDENTIALS_CONTENT).at_least(:once)
 end
 
+LOCAL_SSHCONFIG=<<EOF
+User myusername
+EOF
+
+def mock_local_sshconfig
+  expect(File).to receive(:exist?).with(File.expand_path('~/.ssh/local.sshconfig')).and_return(true).at_least(:once)
+  expect(File).to receive(:read).with(File.expand_path('~/.ssh/local.sshconfig')).and_return(LOCAL_SSHCONFIG).at_least(:once)
+end
+
 SSH_CONFIG_RESULT=<<EOF
 Host default-test-i-deadbeef
   HostName 1.2.3.4
