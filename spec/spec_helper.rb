@@ -102,3 +102,13 @@ def mock_no_ssh_keys
   allow(File).to receive(:exist?).with(File.expand_path('~/.ssh/testkey.pem')).and_return(false).at_least(:once)
   allow(File).to receive(:exist?).with(File.expand_path('~/.ssh/testkey2.pem')).and_return(false).at_least(:once)
 end
+
+OPTIONS_CONTENT=<<EOF
+---
+verbose: true
+force: true
+EOF
+def mock_options
+  expect(File).to receive(:exist?).with(Lakitu::Main::OPTIONS_FILE_PATH).and_return(true).at_least(:once)
+  expect(File).to receive(:read).with(Lakitu::Main::OPTIONS_FILE_PATH).and_return(OPTIONS_CONTENT).at_least(:once)
+end
