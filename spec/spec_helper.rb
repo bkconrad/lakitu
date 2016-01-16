@@ -126,3 +126,7 @@ def mock_options
   expect(File).to receive(:exist?).with(Lakitu::OPTIONS_FILE_PATH).and_return(true).at_least(:once)
   expect(File).to receive(:read).with(Lakitu::OPTIONS_FILE_PATH).and_return(OPTIONS_CONTENT).at_least(:once)
 end
+
+def mock_no_options
+  expect(File).to receive(:exist?).with(Lakitu::OPTIONS_FILE_PATH).and_return(false).at_least(:once)
+end

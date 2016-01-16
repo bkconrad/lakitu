@@ -38,7 +38,7 @@ describe Lakitu::FileOperator do
     it "writes the result to ~/.ssh/config" do
       expect(FileUtils).not_to receive(:mv).with(Lakitu::SSHCONFIG_PATH, Lakitu::LOCAL_SSHCONFIG_PATH)
       expect(File).to receive(:write).with(Lakitu::SSHCONFIG_PATH, "test")
-      subject.write_config! "test"
+      subject.write_ssh_config! "test"
     end
   end
 
