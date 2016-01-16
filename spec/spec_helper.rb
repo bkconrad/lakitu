@@ -92,3 +92,13 @@ def mock_managed_sshconfig
   expect(File).to receive(:exist?).with(File.expand_path('~/.ssh/config')).and_return(true).at_least(:once)
   expect(File).to receive(:read).with(File.expand_path('~/.ssh/config')).and_return(MANAGED_SSH_CONFIG).at_least(:once)
 end
+
+def mock_ssh_keys
+  expect(File).to receive(:exist?).with(File.expand_path('~/.ssh/testkey.pem')).and_return(true).at_least(:once)
+  expect(File).to receive(:exist?).with(File.expand_path('~/.ssh/testkey2.pem')).and_return(true).at_least(:once)
+end
+
+def mock_no_ssh_keys
+  allow(File).to receive(:exist?).with(File.expand_path('~/.ssh/testkey.pem')).and_return(false).at_least(:once)
+  allow(File).to receive(:exist?).with(File.expand_path('~/.ssh/testkey2.pem')).and_return(false).at_least(:once)
+end

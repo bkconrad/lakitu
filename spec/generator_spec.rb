@@ -27,15 +27,19 @@ describe Lakitu::Generator do
   end
 
   it "generates ssh config content from templates" do
+    mock_no_local_sshconfig
+    mock_no_ssh_keys
     expect(subject.generate).to include SSH_CONFIG_RESULT
   end
 
   it "reads ~/.ssh/*.sshconfig files" do
+    mock_no_ssh_keys
     mock_local_sshconfig
     expect(subject.generate).to include LOCAL_SSHCONFIG
   end
 
   it "moves unmanaged ssh configs to local.sshconfig" do
+    mock_no_ssh_keys
     mock_unmanaged_sshconfig
     mock_no_local_sshconfig
     expect(FileUtils).to receive(:mv).with(Lakitu::Generator::SSHCONFIG_PATH, Lakitu::Generator::LOCAL_SSHCONFIG_PATH)
@@ -43,6 +47,7 @@ describe Lakitu::Generator do
   end
 
   it "does not move managed ssh configs to local.sshconfig" do
+    mock_no_ssh_keys
     mock_managed_sshconfig
     mock_no_local_sshconfig
     expect(FileUtils).not_to receive(:mv).with(Lakitu::Generator::SSHCONFIG_PATH, Lakitu::Generator::LOCAL_SSHCONFIG_PATH)
@@ -50,6 +55,7 @@ describe Lakitu::Generator do
   end
 
   it "exits when ssh config is unmanaged and local.sshconfig exists" do
+    mock_no_ssh_keys
     mock_unmanaged_sshconfig
     mock_local_sshconfig
     expect(FileUtils).not_to receive(:mv).with(Lakitu::Generator::SSHCONFIG_PATH, Lakitu::Generator::LOCAL_SSHCONFIG_PATH)
@@ -58,11 +64,18 @@ describe Lakitu::Generator do
   end
 
   it "writes the result to ~/.ssh/config" do
+    mock_no_ssh_keys
     mock_managed_sshconfig
     mock_local_sshconfig
 
     expect(FileUtils).not_to receive(:mv).with(Lakitu::Generator::SSHCONFIG_PATH, Lakitu::Generator::LOCAL_SSHCONFIG_PATH)
     expect(File).to receive(:write).with(Lakitu::Generator::SSHCONFIG_PATH, subject.generate)
     subject.generate!
+  end
+
+  it "looks up keys in ~/.ssh/" do
+    mock_ssh_keys
+    mock_no_local_sshconfig
+    expect(subject.generate).to include "IdentityFile #{File.expand_path("~/.ssh/testkey.pem")}"
   end
 end

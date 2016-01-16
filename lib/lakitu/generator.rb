@@ -2,6 +2,7 @@ require 'erb'
 require 'ostruct'
 class Lakitu::Generator
   MANAGED_SSH_CONFIG_TOKEN = "# Managed by Lakitu"
+  SSH_PATH = File.expand_path '~/.ssh'
   SSHCONFIG_PATH = File.expand_path '~/.ssh/config'
   LOCAL_SSHCONFIG_PATH = File.expand_path '~/.ssh/local.sshconfig'
   CLAUSE_TEMPLATE=<<-EOF
@@ -14,6 +15,8 @@ Host <%= host %><% if keyfile %>
   def generate
     ([ MANAGED_SSH_CONFIG_TOKEN, local_ssh_config ] + instances.map do |instance|
       instance[:host] = "%{profile}-%{name}-%{id}" % instance
+      expected_key_path = File.join SSH_PATH, "#{instance[:key]}.pem"
+      instance[:keyfile] = expected_key_path if File.exist? expected_key_path
       ERB.new(CLAUSE_TEMPLATE).result(OpenStruct.new(instance).instance_eval { binding })
     end).join("\n")
   end
