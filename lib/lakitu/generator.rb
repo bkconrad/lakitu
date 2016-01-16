@@ -72,7 +72,7 @@ Host <%= host %><% if keyfile %>
   end
 
   def ssh_config_is_stale?
-    really_stale = (Time.now - File.mtime(SSHCONFIG_PATH)) > (((options.wait_time || 10) rescue 10) * 60)
+    really_stale = (Time.now - File.mtime(SSHCONFIG_PATH)) > options.wait_time * 60
     return !!(really_stale or options.force)
   end
 

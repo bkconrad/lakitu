@@ -1,6 +1,9 @@
 require 'ostruct'
 class Lakitu::Options
-  @@options = OpenStruct.new
+  DEFAULTS = {
+    wait_time: 10
+  }
+  @@options = OpenStruct.new DEFAULTS
 
   def self.options
     @@options
