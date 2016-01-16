@@ -1,6 +1,8 @@
 require 'erb'
 require 'ostruct'
 class Lakitu::Generator
+  MANAGED_SSH_CONFIG_TOKEN = "# Managed by Lakitu"
+  SSHCONFIG_PATH = File.expand_path '~/.ssh/config'
   LOCAL_SSHCONFIG_PATH = File.expand_path '~/.ssh/local.sshconfig'
   CLAUSE_TEMPLATE=<<-EOF
 Host <%= host %><% if keyfile %>
@@ -10,14 +12,15 @@ Host <%= host %><% if keyfile %>
   EOF
 
   def generate
-    ([ local_ssh_config ] + instances.map do |instance|
+    ([ MANAGED_SSH_CONFIG_TOKEN, local_ssh_config ] + instances.map do |instance|
       instance[:host] = "%{profile}-%{name}-%{id}" % instance
       ERB.new(CLAUSE_TEMPLATE).result(OpenStruct.new(instance).instance_eval { binding })
     end).join("\n")
   end
 
   def generate!
-    puts generate
+    backup_ssh_config!
+    File.write SSHCONFIG_PATH, generate
   end
 
   def instances
@@ -27,6 +30,20 @@ Host <%= host %><% if keyfile %>
   end
 
   private
+
+  def backup_ssh_config!
+    unless ssh_config_is_managed?
+      puts "ssh config is unmanaged"
+      if File.exist? LOCAL_SSHCONFIG_PATH
+        puts "Can't back up unmanaged ssh config: #{LOCAL_SSHCONFIG_PATH} already exists."
+        exit 1
+        return
+      end
+
+      puts "moving #{SSHCONFIG_PATH} to #{LOCAL_SSHCONFIG_PATH}"
+      FileUtils.mv SSHCONFIG_PATH, LOCAL_SSHCONFIG_PATH
+    end
+  end
 
   def get_instances provider
     provider.profiles.map do |profile|
@@ -39,5 +56,10 @@ Host <%= host %><% if keyfile %>
   def local_ssh_config
     return File.read(LOCAL_SSHCONFIG_PATH) if File.exist?(LOCAL_SSHCONFIG_PATH)
     return ""
+  end
+
+  def ssh_config_is_managed?
+    return false unless File.exist? SSHCONFIG_PATH
+    File.read(SSHCONFIG_PATH).include? MANAGED_SSH_CONFIG_TOKEN
   end
 end

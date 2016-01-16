@@ -63,7 +63,32 @@ def mock_local_sshconfig
   expect(File).to receive(:read).with(File.expand_path('~/.ssh/local.sshconfig')).and_return(LOCAL_SSHCONFIG).at_least(:once)
 end
 
+def mock_no_local_sshconfig
+  expect(File).to receive(:exist?).with(File.expand_path('~/.ssh/local.sshconfig')).and_return(false).at_least(:once)
+end
+
 SSH_CONFIG_RESULT=<<EOF
 Host default-test-i-deadbeef
   HostName 1.2.3.4
 EOF
+
+UNMANAGED_SSH_CONFIG=<<EOF
+Host default-test-i-deadbeef
+  HostName 1.2.3.4
+EOF
+
+def mock_unmanaged_sshconfig
+  expect(File).to receive(:exist?).with(File.expand_path('~/.ssh/config')).and_return(true).at_least(:once)
+  expect(File).to receive(:read).with(File.expand_path('~/.ssh/config')).and_return(UNMANAGED_SSH_CONFIG).at_least(:once)
+end
+
+MANAGED_SSH_CONFIG=<<EOF
+# Managed by Lakitu
+Host default-test-i-deadbeef
+  HostName 1.2.3.4
+EOF
+
+def mock_managed_sshconfig
+  expect(File).to receive(:exist?).with(File.expand_path('~/.ssh/config')).and_return(true).at_least(:once)
+  expect(File).to receive(:read).with(File.expand_path('~/.ssh/config')).and_return(MANAGED_SSH_CONFIG).at_least(:once)
+end

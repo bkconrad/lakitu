@@ -3,6 +3,7 @@ describe Lakitu::Generator do
   before :each do
     stub_aws
     mock_config
+    allow(File).to receive(:write).and_return(true)
   end
 
   it "invokes all providers, for all regions, over all profiles" do
@@ -34,5 +35,34 @@ describe Lakitu::Generator do
     expect(subject.generate).to include LOCAL_SSHCONFIG
   end
 
-  it "writes the result to ~/.ssh/config"
+  it "moves unmanaged ssh configs to local.sshconfig" do
+    mock_unmanaged_sshconfig
+    mock_no_local_sshconfig
+    expect(FileUtils).to receive(:mv).with(Lakitu::Generator::SSHCONFIG_PATH, Lakitu::Generator::LOCAL_SSHCONFIG_PATH)
+    subject.generate!
+  end
+
+  it "does not move managed ssh configs to local.sshconfig" do
+    mock_managed_sshconfig
+    mock_no_local_sshconfig
+    expect(FileUtils).not_to receive(:mv).with(Lakitu::Generator::SSHCONFIG_PATH, Lakitu::Generator::LOCAL_SSHCONFIG_PATH)
+    subject.generate!
+  end
+
+  it "exits when ssh config is unmanaged and local.sshconfig exists" do
+    mock_unmanaged_sshconfig
+    mock_local_sshconfig
+    expect(FileUtils).not_to receive(:mv).with(Lakitu::Generator::SSHCONFIG_PATH, Lakitu::Generator::LOCAL_SSHCONFIG_PATH)
+    expect(subject).to receive(:exit).with(1)
+    subject.generate!
+  end
+
+  it "writes the result to ~/.ssh/config" do
+    mock_managed_sshconfig
+    mock_local_sshconfig
+
+    expect(FileUtils).not_to receive(:mv).with(Lakitu::Generator::SSHCONFIG_PATH, Lakitu::Generator::LOCAL_SSHCONFIG_PATH)
+    expect(File).to receive(:write).with(Lakitu::Generator::SSHCONFIG_PATH, subject.generate)
+    subject.generate!
+  end
 end
