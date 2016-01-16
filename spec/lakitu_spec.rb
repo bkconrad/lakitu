@@ -1,4 +1,4 @@
-describe Lakitu::Main do
+describe Lakitu do
   subject { described_class.new }
 
   it "looks up options in ~/.lakitu.yml" do
@@ -7,7 +7,9 @@ describe Lakitu::Main do
   end
 
   it "delegates generate!" do
-    expect_any_instance_of(Lakitu::Generator).to receive(:generate!).and_return(true)
+    expect(Lakitu::FileOperator).to receive(:backup_ssh_config!).and_return(nil)
+    expect(Lakitu::Generator).to receive(:generate).and_return("test")
+    expect(Lakitu::FileOperator).to receive(:write_config!).and_return(nil)
     subject.generate
   end
 end

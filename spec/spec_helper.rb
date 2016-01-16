@@ -51,12 +51,17 @@ region = us-east-1
 EOF
 
 def mock_config
+  allow(File).to receive(:read).and_call_original
   allow(File).to receive(:read).with(File.expand_path('~/.aws/credentials')).and_return(AWS_CREDENTIALS_CONTENT).at_least(:once)
 end
 
 LOCAL_SSHCONFIG=<<EOF
 User myusername
 EOF
+
+def mock_local_sshconfig_exists
+  expect(File).to receive(:exist?).with(File.expand_path('~/.ssh/local.sshconfig')).and_return(true).at_least(:once)
+end
 
 def mock_local_sshconfig
   expect(File).to receive(:exist?).with(File.expand_path('~/.ssh/local.sshconfig')).and_return(true).at_least(:once)
@@ -94,11 +99,11 @@ def mock_managed_sshconfig
 end
 
 def mock_fresh_sshconfig
-  expect(File).to receive(:mtime).with(Lakitu::Generator::SSHCONFIG_PATH).and_return(Time.now).at_least(:once)
+  expect(File).to receive(:mtime).with(Lakitu::SSHCONFIG_PATH).and_return(Time.now).at_least(:once)
 end
 
 def mock_stale_sshconfig
-  expect(File).to receive(:mtime).with(Lakitu::Generator::SSHCONFIG_PATH).and_return(Time.now - 60*60*24).at_least(:once)
+  expect(File).to receive(:mtime).with(Lakitu::SSHCONFIG_PATH).and_return(Time.now - 60*60*24).at_least(:once)
 end
 
 def mock_ssh_keys
@@ -117,6 +122,7 @@ verbose: true
 force: true
 EOF
 def mock_options
-  expect(File).to receive(:exist?).with(Lakitu::Main::OPTIONS_FILE_PATH).and_return(true).at_least(:once)
-  expect(File).to receive(:read).with(Lakitu::Main::OPTIONS_FILE_PATH).and_return(OPTIONS_CONTENT).at_least(:once)
+  allow(File).to receive(:exist?).and_call_original
+  expect(File).to receive(:exist?).with(Lakitu::OPTIONS_FILE_PATH).and_return(true).at_least(:once)
+  expect(File).to receive(:read).with(Lakitu::OPTIONS_FILE_PATH).and_return(OPTIONS_CONTENT).at_least(:once)
 end

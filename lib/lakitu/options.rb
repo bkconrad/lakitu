@@ -1,5 +1,5 @@
 require 'ostruct'
-class Lakitu::Options
+module Lakitu::Options
   DEFAULTS = {
     wait_time: 10
   }

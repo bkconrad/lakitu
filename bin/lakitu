@@ -3,4 +3,4 @@ require "rubygems"
 require "thor"
 require "#{File.dirname(__FILE__)}/../lib/lakitu.rb"
 
-Lakitu::Main.start
+Lakitu.start
