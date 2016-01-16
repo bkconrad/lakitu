@@ -7,7 +7,7 @@ describe Lakitu::Main do
   end
 
   it "delegates generate!" do
-    expect_any_instance_of(Lakitu::Generator).to receive(:generate)
+    expect_any_instance_of(Lakitu::Generator).to receive(:generate!).and_return(true)
     subject.generate
   end
 end

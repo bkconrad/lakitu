@@ -78,4 +78,28 @@ describe Lakitu::Generator do
     mock_no_local_sshconfig
     expect(subject.generate).to include "IdentityFile #{File.expand_path("~/.ssh/testkey.pem")}"
   end
+
+  context "when config is managed" do
+    before :each do mock_managed_sshconfig end
+
+    context "and ssh config is fresh" do
+      before :each do mock_fresh_sshconfig end
+      it "will not overwrite the config" do expect(subject.should_overwrite).to be false end
+
+      context "and force is true" do
+        before :each do subject.send(:options)[:force] = true end
+        it "will overwrite the config" do expect(subject.should_overwrite).to be true end
+      end
+    end
+
+    context "and ssh config is stale" do
+      before :each do mock_stale_sshconfig end
+      it "will overwrite the config" do expect(subject.should_overwrite).to be true end
+    end
+  end
+
+  context "when config is unmanaged" do
+    before :each do mock_unmanaged_sshconfig end
+    it "will overwrite the config" do expect(subject.should_overwrite).to be true end
+  end
 end

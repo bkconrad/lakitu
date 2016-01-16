@@ -32,6 +32,11 @@ Host <%= host %><% if keyfile %>
     end.flatten
   end
 
+  def should_overwrite
+    return true unless ssh_config_is_managed?
+    ssh_config_is_stale?
+  end
+
   private
 
   def backup_ssh_config!
@@ -64,5 +69,14 @@ Host <%= host %><% if keyfile %>
   def ssh_config_is_managed?
     return false unless File.exist? SSHCONFIG_PATH
     File.read(SSHCONFIG_PATH).include? MANAGED_SSH_CONFIG_TOKEN
+  end
+
+  def ssh_config_is_stale?
+    really_stale = (Time.now - File.mtime(SSHCONFIG_PATH)) > (((options.wait_time || 10) rescue 10) * 60)
+    return !!(really_stale or options.force)
+  end
+
+  def options
+    Lakitu::Options::options
   end
 end

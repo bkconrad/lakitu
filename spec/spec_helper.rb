@@ -51,7 +51,7 @@ region = us-east-1
 EOF
 
 def mock_config
-  expect(File).to receive(:read).with(File.expand_path('~/.aws/credentials')).and_return(AWS_CREDENTIALS_CONTENT).at_least(:once)
+  allow(File).to receive(:read).with(File.expand_path('~/.aws/credentials')).and_return(AWS_CREDENTIALS_CONTENT).at_least(:once)
 end
 
 LOCAL_SSHCONFIG=<<EOF
@@ -91,6 +91,14 @@ EOF
 def mock_managed_sshconfig
   expect(File).to receive(:exist?).with(File.expand_path('~/.ssh/config')).and_return(true).at_least(:once)
   expect(File).to receive(:read).with(File.expand_path('~/.ssh/config')).and_return(MANAGED_SSH_CONFIG).at_least(:once)
+end
+
+def mock_fresh_sshconfig
+  expect(File).to receive(:mtime).with(Lakitu::Generator::SSHCONFIG_PATH).and_return(Time.now).at_least(:once)
+end
+
+def mock_stale_sshconfig
+  expect(File).to receive(:mtime).with(Lakitu::Generator::SSHCONFIG_PATH).and_return(Time.now - 60*60*24).at_least(:once)
 end
 
 def mock_ssh_keys
