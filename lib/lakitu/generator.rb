@@ -18,10 +18,12 @@ Host <%= host %><% if keyfile %>
   end
 
   def self.instances
-    Lakitu::Provider.providers.map do |provider_class|
+    result = Lakitu::Provider.providers.map do |provider_class|
       Lakitu.logger.debug "Getting instances for #{provider_class.name}"
       get_instances(provider_class.new)
     end.flatten
+    Lakitu.logger.info "Found #{result.length} instances"
+    result
   end
 
   private

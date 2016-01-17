@@ -38,6 +38,9 @@ class Lakitu < Thor
     unless @@logger
       @@logger = ::Logger.new STDOUT
       logger.level = Lakitu::Options.options.verbose ? ::Logger::DEBUG : ::Logger::INFO
+      logger.formatter = proc do |severity, datetime, progname, msg|
+        "#{severity}: #{msg}\n"
+      end
     end
     @@logger
   end

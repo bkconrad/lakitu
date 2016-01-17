@@ -10,6 +10,7 @@ module Lakitu::FileOperator
 
   def self.write_ssh_config! content
     raise RuntimeError.new("Won't overwrite unmanaged ssh config") unless ssh_config_is_managed? or !File.exist?(Lakitu::SSHCONFIG_PATH)
+    Lakitu.logger.info "Writing ssh config to #{Lakitu::SSHCONFIG_PATH}"
     File.write Lakitu::SSHCONFIG_PATH, content
   end
 
@@ -33,7 +34,7 @@ module Lakitu::FileOperator
         return
       end
 
-      Lakitu.logger.debug "Moving #{Lakitu::SSHCONFIG_PATH} to #{Lakitu::LOCAL_SSHCONFIG_PATH}"
+      Lakitu.logger.info "Moving #{Lakitu::SSHCONFIG_PATH} to #{Lakitu::LOCAL_SSHCONFIG_PATH}"
       FileUtils.mv Lakitu::SSHCONFIG_PATH, Lakitu::LOCAL_SSHCONFIG_PATH
     end
   end
@@ -47,6 +48,7 @@ module Lakitu::FileOperator
     ssh_config_age_minutes = (Time.now - File.mtime(Lakitu::SSHCONFIG_PATH)) / 60
     really_stale = ssh_config_age_minutes > options.refresh_interval_minutes
     Lakitu.logger.debug "SSH Config modified #{ssh_config_age_minutes} minutes ago, threshold: #{options.refresh_interval_minutes}"
+    Lakitu.logger.info "SSH config is still fresh, use --force to force generation" unless really_stale
     return !!(really_stale or options.force)
   end
 
