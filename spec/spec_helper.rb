@@ -1,7 +1,15 @@
+require 'logger'
 require 'simplecov'
 SimpleCov.start
 
 require './lib/lakitu.rb'
+
+# silence the logger
+RSpec.configure do |config|
+  config.before do
+    Lakitu.logger = Logger.new(false)
+  end
+end
 
 def stub_aws
   Aws.config[:ec2] = {

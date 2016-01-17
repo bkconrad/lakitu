@@ -25,14 +25,14 @@ module Lakitu::FileOperator
   def self.backup_ssh_config!
     return unless File.exist? Lakitu::SSHCONFIG_PATH
     unless ssh_config_is_managed?
-      puts "ssh config is unmanaged"
+      Lakitu.logger.debug "SSH config is unmanaged"
       if File.exist? Lakitu::LOCAL_SSHCONFIG_PATH
-        puts "Can't back up unmanaged ssh config: #{Lakitu::LOCAL_SSHCONFIG_PATH} already exists."
+        Lakitu.logger.fatal "Can't back up unmanaged ssh config: #{Lakitu::LOCAL_SSHCONFIG_PATH} already exists."
         exit 1
         return
       end
 
-      puts "moving #{Lakitu::SSHCONFIG_PATH} to #{Lakitu::LOCAL_SSHCONFIG_PATH}"
+      Lakitu.logger.debug "Moving #{Lakitu::SSHCONFIG_PATH} to #{Lakitu::LOCAL_SSHCONFIG_PATH}"
       FileUtils.mv Lakitu::SSHCONFIG_PATH, Lakitu::LOCAL_SSHCONFIG_PATH
     end
   end

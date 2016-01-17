@@ -1,4 +1,5 @@
 $LOAD_PATH << File.dirname(File.expand_path(__FILE__))
+require "logger"
 require "yaml"
 require "thor"
 require "lakitu/version"
@@ -30,5 +31,18 @@ class Lakitu < Thor
   def configure
     Lakitu::Options.merge options
     Lakitu::Configurer.configure
+  end
+
+  @@logger = nil
+  def self.logger
+    unless @@logger
+      @@logger = ::Logger.new STDOUT
+      logger.level = Lakitu::Options.options.verbose ? ::Logger::DEBUG : ::Logger::INFO
+    end
+    @@logger
+  end
+
+  def self.logger= arg
+    @@logger = arg
   end
 end
