@@ -19,6 +19,7 @@ Host <%= host %><% if keyfile %>
 
   def self.instances
     Lakitu::Provider.providers.map do |provider_class|
+      Lakitu.logger.debug "Getting instances for #{provider_class.name}"
       get_instances(provider_class.new)
     end.flatten
   end
@@ -27,8 +28,12 @@ Host <%= host %><% if keyfile %>
 
   def self.get_instances provider
     provider.profiles.map do |profile|
+      Lakitu.logger.debug "Profile: #{profile}"
       provider.regions.map do |region|
-        provider.instances(profile, region)
+        Lakitu.logger.debug "  Region: #{region}"
+        result = provider.instances(profile, region)
+        Lakitu.logger.debug "    Found #{(result.length rescue 0)} instances"
+        result
       end
     end.flatten
   end

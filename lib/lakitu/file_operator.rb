@@ -4,6 +4,7 @@ module Lakitu::FileOperator
   def self.key_path key_name
     expected_key_path = File.join Lakitu::SSH_PATH, "#{key_name}.pem"
     return nil unless File.exist? expected_key_path
+    Lakitu.logger.debug "Found key at #{expected_key_path}"
     expected_key_path
   end
 
@@ -43,7 +44,9 @@ module Lakitu::FileOperator
   end
 
   def self.ssh_config_is_stale?
-    really_stale = (Time.now - File.mtime(Lakitu::SSHCONFIG_PATH)) > options.refresh_interval_minutes * 60
+    ssh_config_age_minutes = (Time.now - File.mtime(Lakitu::SSHCONFIG_PATH)) / 60
+    really_stale = ssh_config_age_minutes > options.refresh_interval_minutes
+    Lakitu.logger.debug "SSH Config modified #{ssh_config_age_minutes} minutes ago, threshold: #{options.refresh_interval_minutes}"
     return !!(really_stale or options.force)
   end
 
