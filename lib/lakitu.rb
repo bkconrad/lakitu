@@ -31,19 +31,4 @@ class Lakitu < Thor
     Lakitu::Options.merge options
     Lakitu::Configurer.configure
   end
-
-  private
-
-  def self.deep_symbolize_keys object
-    case object
-    when Hash
-      object.each_with_object({}) do |(key, value), result|
-        result[key.to_sym] = deep_symbolize_keys(value)
-      end
-    when Array
-      object.map {|e| deep_symbolize_keys(e) }
-    else
-      object
-    end
-  end
 end

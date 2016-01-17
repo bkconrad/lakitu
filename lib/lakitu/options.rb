@@ -27,7 +27,39 @@ module Lakitu::Options
 
   def self.config_options
     return { } unless File.exist?(Lakitu::OPTIONS_FILE_PATH)
-    Lakitu.deep_symbolize_keys(::YAML::load(File.read(Lakitu::OPTIONS_FILE_PATH)) || {})
+    deep_symbolize_keys(::YAML::load(File.read(Lakitu::OPTIONS_FILE_PATH)) || {})
+  end
+
+  def self.default_config
+    create_provider_defaults
+    YAML.dump(deep_stringify_keys(options.to_h))
+  end
+
+  private
+  def self.deep_stringify_keys object
+    case object
+    when Hash
+      object.each_with_object({}) do |(key, value), result|
+        result[key.to_s] = deep_stringify_keys(value)
+      end
+    when Array
+      object.map {|e| deep_stringify_keys(e) }
+    else
+      object
+    end
+  end
+
+  def self.deep_symbolize_keys object
+    case object
+    when Hash
+      object.each_with_object({}) do |(key, value), result|
+        result[key.to_sym] = deep_symbolize_keys(value)
+      end
+    when Array
+      object.map {|e| deep_symbolize_keys(e) }
+    else
+      object
+    end
   end
 
   def self.create_provider_defaults

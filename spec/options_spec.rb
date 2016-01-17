@@ -20,4 +20,15 @@ describe Lakitu::Options do
     Lakitu::Options.merge refresh_interval_minutes: 1
     expect(described_class.options.refresh_interval_minutes).to eq 1
   end
+
+  it "includes providers and profiles in default config" do
+    mock_no_options
+    mock_config
+    stub_aws
+    result = YAML.load(subject.default_config)
+    expect(result).to be_a Hash
+    expect(result['refresh_interval_minutes']).to eql 10
+    expect(result['providers']).to be_a Hash
+    expect(result['providers']['aws']['client1']['ignore']).to be false
+  end
 end
