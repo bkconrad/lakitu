@@ -8,7 +8,7 @@ module Lakitu::FileOperator
   end
 
   def self.write_ssh_config! content
-    throw new Error("Won't overwrite unmanaged ssh config") unless ssh_config_is_managed?
+    raise RuntimeError.new("Won't overwrite unmanaged ssh config") unless ssh_config_is_managed? or !File.exist?(Lakitu::SSHCONFIG_PATH)
     File.write Lakitu::SSHCONFIG_PATH, content
   end
 
@@ -23,6 +23,7 @@ module Lakitu::FileOperator
   end
 
   def self.backup_ssh_config!
+    return unless File.exist? Lakitu::SSHCONFIG_PATH
     unless ssh_config_is_managed?
       puts "ssh config is unmanaged"
       if File.exist? Lakitu::LOCAL_SSHCONFIG_PATH
@@ -42,7 +43,7 @@ module Lakitu::FileOperator
   end
 
   def self.ssh_config_is_stale?
-    really_stale = (Time.now - File.mtime(Lakitu::SSHCONFIG_PATH)) > options.wait_time * 60
+    really_stale = (Time.now - File.mtime(Lakitu::SSHCONFIG_PATH)) > options.refresh_interval_minutes * 60
     return !!(really_stale or options.force)
   end
 

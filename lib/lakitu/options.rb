@@ -1,7 +1,7 @@
 require 'ostruct'
 module Lakitu::Options
   DEFAULTS = {
-    wait_time: 10
+    refresh_interval_minutes: 10
   }
 
   PROFILE_DEFAULTS = {
@@ -14,7 +14,7 @@ module Lakitu::Options
   end
 
   def self.options= arg
-    @@options = OpenStruct.new arg
+    @@options = OpenStruct.new arg.merge(DEFAULTS)
   end
 
   def self.create_provider_defaults

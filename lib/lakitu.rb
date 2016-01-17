@@ -23,7 +23,7 @@ class Lakitu < Thor
   def generate
     Lakitu::Options.options = options
     Lakitu::FileOperator.backup_ssh_config!
-    Lakitu::FileOperator.write_ssh_config! Lakitu::Generator.generate
+    Lakitu::FileOperator.write_ssh_config! Lakitu::Generator.generate if Lakitu::FileOperator::should_overwrite
   end
 
   desc "configure [options]", "Open Lakitu's config file in the system editor"

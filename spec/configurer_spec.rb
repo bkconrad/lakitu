@@ -26,6 +26,7 @@ describe Lakitu::Configurer do
     stub_aws
     result = YAML.load(subject.default_config)
     expect(result).to be_a Hash
+    expect(result['refresh_interval_minutes']).to eql 10
     expect(result['providers']).to be_a Hash
     expect(result['providers']['aws']['client1']['ignore']).to be false
   end

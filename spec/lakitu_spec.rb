@@ -11,6 +11,7 @@ describe Lakitu do
     expect(Lakitu::FileOperator).to receive(:backup_ssh_config!).and_return(nil)
     expect(Lakitu::Generator).to receive(:generate).and_return("test")
     expect(Lakitu::FileOperator).to receive(:write_ssh_config!).and_return(nil)
+    expect(Lakitu::FileOperator).to receive(:should_overwrite).and_return(true)
     subject.generate
   end
 
