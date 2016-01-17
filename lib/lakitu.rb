@@ -21,25 +21,18 @@ class Lakitu < Thor
 
   desc "generate [options]", "Generate the ssh config"
   def generate
-    Lakitu::Options.options = options
+    Lakitu::Options.merge options
     Lakitu::FileOperator.backup_ssh_config!
     Lakitu::FileOperator.write_ssh_config! Lakitu::Generator.generate if Lakitu::FileOperator::should_overwrite
   end
 
   desc "configure [options]", "Open Lakitu's config file in the system editor"
   def configure
-    Lakitu::Options.options = options
+    Lakitu::Options.merge options
     Lakitu::Configurer.configure
   end
 
   private
-
-  def options
-    original_options = super
-    return original_options unless File.exist?(OPTIONS_FILE_PATH)
-    defaults = Lakitu.deep_symbolize_keys(::YAML::load(File.read(OPTIONS_FILE_PATH)) || {})
-    @loaded_options = Thor::CoreExt::HashWithIndifferentAccess.new(defaults.merge(original_options))
-  end
 
   def self.deep_symbolize_keys object
     case object

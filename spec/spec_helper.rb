@@ -120,6 +120,7 @@ OPTIONS_CONTENT=<<EOF
 ---
 verbose: true
 force: true
+refresh_interval_minutes: 5
 EOF
 def mock_options
   allow(File).to receive(:exist?).and_call_original

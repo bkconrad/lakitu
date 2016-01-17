@@ -7,14 +7,27 @@ module Lakitu::Options
   PROFILE_DEFAULTS = {
     ignore: false
   }
-  @@options = OpenStruct.new DEFAULTS
+
+  @@options = nil
 
   def self.options
+    unless @@options
+      @@options = OpenStruct.new(DEFAULTS.merge config_options)
+    end
     @@options
   end
 
   def self.options= arg
-    @@options = OpenStruct.new arg.merge(DEFAULTS)
+    @@options = arg ? OpenStruct.new(arg) : arg
+  end
+
+  def self.merge arg
+    @@options = OpenStruct.new(options.to_h.merge arg)
+  end
+
+  def self.config_options
+    return { } unless File.exist?(Lakitu::OPTIONS_FILE_PATH)
+    Lakitu.deep_symbolize_keys(::YAML::load(File.read(Lakitu::OPTIONS_FILE_PATH)) || {})
   end
 
   def self.create_provider_defaults
