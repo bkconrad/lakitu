@@ -21,4 +21,9 @@ describe Lakitu::Configurer do
     expect(subject).to receive(:system).with(Lakitu::EDIT_FILE_COMMAND)
     subject.edit
   end
+
+  it "opens local config file in default editor" do
+    expect(subject).to receive(:system).with(Lakitu::EDIT_LOCAL_CONFIG_COMMAND)
+    subject.edit_local
+  end
 end

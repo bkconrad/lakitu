@@ -12,4 +12,10 @@ describe Lakitu do
     expect(Lakitu::Configurer).to receive(:configure).and_return("test")
     subject.configure
   end
+
+  it "delegates edit" do
+    expect(Lakitu::Configurer).to receive(:edit_local).and_return(true)
+    expect(subject).to receive(:invoke).with(:generate).and_return(true)
+    subject.edit
+  end
 end

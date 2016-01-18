@@ -17,4 +17,8 @@ module Lakitu::Configurer
   def self.edit
     system Lakitu::EDIT_FILE_COMMAND
   end
+
+  def self.edit_local
+    system Lakitu::EDIT_LOCAL_CONFIG_COMMAND
+  end
 end

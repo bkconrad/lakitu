@@ -17,6 +17,7 @@ class Lakitu < Thor
   SSHCONFIG_PATH = File.expand_path '~/.ssh/config'
   EDIT_FILE_COMMAND = "$EDITOR #{OPTIONS_FILE_PATH}"
   DEFAULT_FORMAT = "%{profile}-%{name}-%{id}"
+  EDIT_LOCAL_CONFIG_COMMAND = "$EDITOR #{LOCAL_SSHCONFIG_PATH}"
 
   class_options %w( force -f ) => :boolean
   class_options %w( verbose -v ) => :boolean
@@ -32,6 +33,12 @@ class Lakitu < Thor
   def configure
     Lakitu::Options.merge options
     Lakitu::Configurer.configure
+  end
+
+  desc "edit", "edit #{Lakitu::LOCAL_SSHCONFIG_PATH} and generate config after"
+  def edit
+    Lakitu::Options.options[:force] = true
+    invoke :generate if Lakitu::Configurer.edit_local
   end
 
   @@logger = nil
