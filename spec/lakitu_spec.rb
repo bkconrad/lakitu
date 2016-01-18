@@ -9,7 +9,8 @@ describe Lakitu do
   end
 
   it "delegates configure" do
-    expect(Lakitu::Configurer).to receive(:configure).and_return("test")
+    expect(Lakitu::Configurer).to receive(:find_or_create_config).and_return(true)
+    expect(Lakitu::Configurer).to receive(:edit).and_return("test")
     subject.configure
   end
 
@@ -17,5 +18,11 @@ describe Lakitu do
     expect(Lakitu::Configurer).to receive(:edit_local).and_return(true)
     expect(subject).to receive(:invoke).with(:generate).and_return(true)
     subject.edit
+  end
+
+  it "creates a logger" do
+    Lakitu.logger = nil
+    Lakitu::Options.options.verbose = false
+    expect(Lakitu.logger).to be_a(Logger)
   end
 end

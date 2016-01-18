@@ -32,7 +32,8 @@ class Lakitu < Thor
   desc "configure [options]", "Open Lakitu's config file in the system editor"
   def configure
     Lakitu::Options.merge options
-    Lakitu::Configurer.configure
+    Lakitu::Configurer.find_or_create_config
+    Lakitu::Configurer.edit
   end
 
   desc "edit", "edit #{Lakitu::LOCAL_SSHCONFIG_PATH} and generate config after"
