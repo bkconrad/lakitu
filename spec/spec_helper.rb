@@ -34,6 +34,7 @@ WRANGLED_INSTANCE_DATA_COMPLETE=[
     key: 'testkey',
     profile: 'default',
     region: 'us-east-1',
+    provider: 'aws',
     public_ip: '1.2.3.4'
   },
   {
@@ -42,6 +43,7 @@ WRANGLED_INSTANCE_DATA_COMPLETE=[
     key: 'testkey2',
     profile: 'default',
     region: 'us-east-1',
+    provider: 'aws',
     public_ip: '1.2.3.5'
   }
 ]
@@ -129,6 +131,10 @@ OPTIONS_CONTENT=<<EOF
 verbose: true
 force: true
 refresh_interval_minutes: 5
+providers:
+  aws:
+    client1:
+      format: "formattest"
 EOF
 def mock_options
   allow(File).to receive(:exist?).and_call_original

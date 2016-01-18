@@ -16,6 +16,7 @@ class Lakitu < Thor
   SSH_PATH = File.expand_path '~/.ssh'
   SSHCONFIG_PATH = File.expand_path '~/.ssh/config'
   EDIT_FILE_COMMAND = "$EDITOR #{OPTIONS_FILE_PATH}"
+  DEFAULT_FORMAT = "%{profile}-%{name}-%{id}"
 
   class_options %w( force -f ) => :boolean
   class_options %w( verbose -v ) => :boolean

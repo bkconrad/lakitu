@@ -17,6 +17,7 @@ class Lakitu::Provider::Aws < Lakitu::Provider
     result.each do |x|
       x[:profile] = profile
       x[:region] = region
+      x[:provider] = 'aws'
     end
   end
 

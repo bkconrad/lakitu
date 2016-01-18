@@ -29,7 +29,11 @@ describe Lakitu::Generator do
   it "generates ssh config content from templates" do
     mock_no_local_sshconfig
     mock_no_ssh_keys
-    expect(subject.generate).to include SSH_CONFIG_RESULT
+    mock_options
+    Lakitu::Options.options = nil
+    result = subject.generate 
+    expect(result).to include SSH_CONFIG_RESULT
+    expect(result).to include "Host formattest"
   end
 
   it "reads ~/.ssh/*.sshconfig files" do

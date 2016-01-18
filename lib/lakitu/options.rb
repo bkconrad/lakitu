@@ -5,7 +5,8 @@ module Lakitu::Options
   }
 
   PROFILE_DEFAULTS = {
-    ignore: false
+    ignore: false,
+    format: "%{profile}-%{name}-%{id}"
   }
 
   @@options = nil
@@ -65,11 +66,12 @@ module Lakitu::Options
   def self.create_provider_defaults
     options[:providers] ||= {}
     Lakitu::Provider.providers.each do |provider_class|
+      provider_key = provider_class.name.downcase.split('::').last.to_sym
+      next if options[:providers][provider_key]
       result = provider_class.new.profiles.inject({}) do |memo, profile|
         memo[profile.to_sym] = PROFILE_DEFAULTS.dup
         memo
       end
-      provider_key = provider_class.name.downcase.split('::').last.to_sym
       options[:providers][provider_key] = result
     end
   end
