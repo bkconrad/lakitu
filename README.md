@@ -1,4 +1,5 @@
 # Lakitu
+![CircleCI build status](https://circleci.com/gh/bkconrad/lakitu.png?circle-token=a622a5a71cc7a5ad0662d05e164a67f8ddbdaff1)
 
 Generate an SSH config from AWS (or potentially other cloud provider) APIs.
 
