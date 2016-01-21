@@ -1,4 +1,3 @@
-require 'thor'
-class Lakitu < Thor
+class LakituVersion
   VERSION = "1.0.2"
 end

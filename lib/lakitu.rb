@@ -2,12 +2,6 @@ $LOAD_PATH << File.dirname(File.expand_path(__FILE__))
 require "logger"
 require "yaml"
 require "thor"
-require "lakitu/version"
-require "lakitu/configurer"
-require "lakitu/file_operator"
-require "lakitu/generator"
-require "lakitu/options"
-require "lakitu/providers/aws"
 
 class Lakitu < Thor
   LOCAL_SSHCONFIG_PATH = File.expand_path '~/.ssh/local.sshconfig'
@@ -58,3 +52,10 @@ class Lakitu < Thor
     @@logger = arg
   end
 end
+
+require "lakitu/version"
+require "lakitu/configurer"
+require "lakitu/file_operator"
+require "lakitu/generator"
+require "lakitu/options"
+require "lakitu/providers/aws"

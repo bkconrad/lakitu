@@ -5,7 +5,7 @@ require 'lakitu/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "lakitu"
-  spec.version       = Lakitu::VERSION
+  spec.version       = LakituVersion::VERSION
   spec.authors       = ["Bryan Conrad"]
   spec.email         = ["bkconrad@gmail.com"]
   spec.summary       = %q{Ride the clouds}
