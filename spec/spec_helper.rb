@@ -19,7 +19,7 @@ def stub_aws
           instances: [
             { instance_id: 'i-abcd1234', public_ip_address: '1.2.3.3', key_name: 'testkey', state: { name: 'stopped' }, tags: [ { key: 'Name', value: 'deadman' } ] },
             { instance_id: 'i-deadbeef', public_ip_address: '1.2.3.4', key_name: 'testkey', state: { name: 'running' }, tags: [ { key: 'Name', value: 'test' } ] },
-            { instance_id: 'i-beeff00d', public_ip_address: '1.2.3.5', key_name: 'testkey2', state: { name: 'running' }, tags: [ { key: 'Name', value: 'test2' } ] }
+            { instance_id: 'i-beeff00d', private_ip_address: '1.2.3.5', key_name: 'testkey2', state: { name: 'running' }, tags: [ { key: 'Name', value: 'test2' } ] }
           ]}
         ]
       }
@@ -35,7 +35,8 @@ WRANGLED_INSTANCE_DATA_COMPLETE=[
     profile: 'default',
     region: 'us-east-1',
     provider: 'aws',
-    public_ip: '1.2.3.4'
+    public_ip: '1.2.3.4',
+    private_ip: nil
   },
   {
     id: 'i-beeff00d',
@@ -44,7 +45,8 @@ WRANGLED_INSTANCE_DATA_COMPLETE=[
     profile: 'default',
     region: 'us-east-1',
     provider: 'aws',
-    public_ip: '1.2.3.5'
+    public_ip: nil,
+    private_ip: '1.2.3.5'
   }
 ]
 
@@ -85,6 +87,9 @@ end
 SSH_CONFIG_RESULT=<<EOF
 Host default-test-i-deadbeef
   HostName 1.2.3.4
+
+Host default-test2-i-beeff00d
+  HostName 1.2.3.5
 EOF
 
 UNMANAGED_SSH_CONFIG=<<EOF

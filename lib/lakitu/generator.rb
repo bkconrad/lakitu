@@ -5,7 +5,7 @@ module Lakitu::Generator
 Host <%= host %><% if keyfile %>
   IdentityFile <%= keyfile %>
   <% end %>
-  HostName <%= public_ip %>
+  HostName <%= public_ip || private_ip %>
   EOF
 
   def self.generate

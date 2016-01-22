@@ -36,6 +36,7 @@ class Lakitu::Provider::Aws < Lakitu::Provider
       id: instance.id,
       name: (instance.tags.select do |x| x.key == 'Name' end.first.value rescue 'blank'),
       key: instance.key_name,
+      private_ip: instance.private_ip_address,
       public_ip: instance.public_ip_address
     }
   end
