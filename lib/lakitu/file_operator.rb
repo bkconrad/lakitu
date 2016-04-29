@@ -46,10 +46,10 @@ module Lakitu::FileOperator
 
   def self.ssh_config_is_stale?
     ssh_config_age_minutes = (Time.now - File.mtime(Lakitu::SSHCONFIG_PATH)) / 60
-    really_stale = ssh_config_age_minutes > options.refresh_interval_minutes
+    effectively_stale = (ssh_config_age_minutes > options.refresh_interval_minutes or options.force)
     Lakitu.logger.debug "SSH Config modified #{ssh_config_age_minutes} minutes ago, threshold: #{options.refresh_interval_minutes}"
-    Lakitu.logger.info "SSH config is still fresh, use --force to force generation" unless really_stale
-    return !!(really_stale or options.force)
+    Lakitu.logger.info "SSH config is still fresh, use --force to force generation" unless effectively_stale
+    return !!effectively_stale
   end
 
   def self.lakitu_config_exists?
