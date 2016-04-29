@@ -9,9 +9,10 @@ class Lakitu < Thor
   OPTIONS_FILE_PATH = File.expand_path "~/.lakitu.yml"
   SSH_PATH = File.expand_path '~/.ssh'
   SSHCONFIG_PATH = File.expand_path '~/.ssh/config'
-  EDIT_FILE_COMMAND = "#{ENV['EDITOR'] || 'nano'} #{OPTIONS_FILE_PATH}"
+  EDITOR = ENV['EDITOR'] || 'nano'
+  EDIT_FILE_COMMAND = "#{EDITOR} #{OPTIONS_FILE_PATH}"
   DEFAULT_FORMAT = "%{profile}-%{name}-%{id}"
-  EDIT_LOCAL_CONFIG_COMMAND = "$EDITOR #{LOCAL_SSHCONFIG_PATH}"
+  EDIT_LOCAL_CONFIG_COMMAND = "#{EDITOR} #{LOCAL_SSHCONFIG_PATH}"
 
   class_options %w( force -f ) => :boolean
   class_options %w( verbose -v ) => :boolean
