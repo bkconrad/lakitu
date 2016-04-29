@@ -3,8 +3,12 @@ require 'iniparse'
 require 'lakitu/provider'
 
 class Lakitu::Provider::Aws < Lakitu::Provider
+  CREDENTIALS_PATH = '~/.aws/credentials'
   def profiles
-    IniParse.parse(File.read(File.expand_path('~/.aws/credentials'))).to_hash.keys.reject() do |x| x == '__anonymous__' end
+    IniParse.parse(File.read(File.expand_path(CREDENTIALS_PATH))).to_hash.keys.reject() do |x| x == '__anonymous__' end
+  rescue Errno::ENOENT
+    Lakitu.logger.info "No AWS credentials file found at #{CREDENTIALS_PATH}, skipping"
+    []
   end
 
   def instances profile, region

@@ -67,6 +67,11 @@ def mock_config
   allow(File).to receive(:read).with(File.expand_path('~/.aws/credentials')).and_return(AWS_CREDENTIALS_CONTENT).at_least(:once)
 end
 
+def mock_no_config
+  allow(File).to receive(:read).and_call_original
+  allow(File).to receive(:read).with(File.expand_path('~/.aws/credentials')).and_raise(Errno::ENOENT).at_least(:once)
+end
+
 LOCAL_SSHCONFIG=<<EOF
 User myusername
 EOF

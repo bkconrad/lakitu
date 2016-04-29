@@ -10,6 +10,16 @@ RSpec.describe Lakitu::Provider::Aws do
     end
   end
 
+  context "without a valid credentials config" do
+    before :each do
+      mock_no_config
+    end
+
+    it "fails to get a list of profiles" do
+      expect(subject.profiles).to eq []
+    end
+  end
+
   context "with a given list of instances" do
     before do
       stub_aws
