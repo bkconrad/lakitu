@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gemspec
 
 gem "thor", "~>0.19"
-gem 'aws-sdk', '~> 2'
+gem 'aws-sdk-resources', '~> 2'
 gem "iniparse"
 
 group :development do
