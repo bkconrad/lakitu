@@ -4,6 +4,11 @@ require 'lakitu/provider'
 
 class Lakitu::Provider::Aws < Lakitu::Provider
   CREDENTIALS_PATH = '~/.aws/credentials'
+  REGIONS = %w(
+    us-east-1
+    us-west-1
+    us-west-2
+  )
   def profiles
     IniParse.parse(File.read(File.expand_path(CREDENTIALS_PATH))).to_hash.keys.reject() do |x| x == '__anonymous__' end
   rescue Errno::ENOENT
@@ -26,7 +31,7 @@ class Lakitu::Provider::Aws < Lakitu::Provider
   end
 
   def regions
-    [ 'us-east-1', 'us-west-1', 'us-west-2' ]
+    REGIONS
   end
 
   private
